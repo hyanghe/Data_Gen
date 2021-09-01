@@ -1,0 +1,8 @@
+/ThermalArt_APDL
+/SystemThermal_Fluent/NaturalConvection_data_gen
+/SystemThermal_Fluent/Fluent_inputs
+/SystemThermal_Fluent/Fluent_outputs
+/SystemThermal_Fluent/run_fluent_new_noudf_v07.jou
+/SystemThermal_Fluent/src
+/SystemThermal_Fluent/data
+/SystemThermal_Fluent/96_case_min_max_recording.txt
