@@ -5,4 +5,5 @@
 /SystemThermal_Fluent/run_fluent_new_noudf_v07.jou
 /SystemThermal_Fluent/src
 /SystemThermal_Fluent/data
+/SystemThermal_Fluent/T_min_predictor
 /SystemThermal_Fluent/96_case_min_max_recording.txt
