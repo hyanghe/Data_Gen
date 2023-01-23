@@ -1,0 +1,162 @@
+/clear,nost
+/BATCH  
+! /COM,ANSYS RELEASE 2021 R1           BUILD 21.1      UP20201109       18:15:54  
+/input,menust,tmp,''
+! /GRA,POWER  
+! /GST,ON 
+! /PLO,INFO,3 
+! /GRO,CURL,ON
+! /CPLANE,1   
+! /REPLOT,RESIZE  
+WPSTYLE,,,,,,,,0
+! /REPLOT,RESIZE  
+!*  
+/NOPR   
+KEYW,PR_SET,1   
+KEYW,PR_STRUC,0 
+KEYW,PR_THERM,1 
+KEYW,PR_FLUID,0 
+KEYW,PR_ELMAG,0 
+KEYW,MAGNOD,0   
+KEYW,MAGEDG,0   
+KEYW,MAGHFE,0   
+KEYW,MAGELC,0   
+KEYW,PR_MULTI,0 
+/GO 
+!*  
+! /COM,   
+! /COM,Preferences for GUI filtering have been set to display:
+! /COM,  Thermal  
+!*  
+/PREP7  
+!*  
+ET,1,PLANE55
+!*  
+!*  
+MPTEMP,,,,,,,,  
+MPTEMP,1,0  
+MPDATA,KXX,1,,1 
+MPTEMP,,,,,,,,  
+MPTEMP,1,0  
+MPDATA,DENS,1,,1
+BLC4,0,0,1,1
+TYPE,   1   
+MAT,       1
+REAL,   
+ESYS,       0   
+SECNUM, 
+!*  
+ESIZE,0.01,0,   
+MSHAPE,1,2D 
+MSHKEY,0
+!*  
+CM,_Y,AREA  
+ASEL, , , ,       1 
+CM,_Y1,AREA 
+CHKMSH,'AREA'   
+CMSEL,S,_Y  
+!*  
+AMESH,_Y1   
+elist
+!*  
+CMDELE,_Y   
+CMDELE,_Y1  
+CMDELE,_Y2  
+!*  
+FINISH  
+/SOL
+!*  
+ANTYPE,0
+FLST,2,4,4,ORDE,2   
+FITEM,2,1   
+FITEM,2,-4  
+!*  
+/GO 
+DL,P51X, ,TEMP,0,0  
+FLST,2,1,5,ORDE,1   
+FITEM,2,1   
+/GO 
+
+FINISH  
+/SOL
+  
+*DIM,power_map_2,TABLE,3,3,1,y,x, ,   0 
+*SET,POWER_MAP_2(0,1,1) , 0 
+*SET,POWER_MAP_2(0,2,1) , 0.7   
+*SET,POWER_MAP_2(0,3,1) , 1 
+*SET,POWER_MAP_2(1,0,1) , 0 
+*SET,POWER_MAP_2(2,0,1) , 0.5   
+*SET,POWER_MAP_2(2,2,1) , 10
+*SET,POWER_MAP_2(3,0,1) , 1 
+!*  
+alls
+BF,all,HGEN, %power_map_2%
+
+! /STATUS,SOLU
+ 
+/PREP7
+
+*get,nnode,NODE,0,COUNT   ! number of nodes
+
+alls
+*vget,nl,node,,nlist
+*vget,nx,node,,loc,x 
+*vget,ny,node,,loc,y
+*vget,nz,node,,loc,z 
+
+!nnode = 100
+
+*DIM,HGnode  ,ARRAY, nnode  
+*do,i,1,nnode,1
+*GET,HGnode(i),node,i,hgen,
+*enddo
+
+!*CFOPEN,getHGnode,txt     ! save data to this file
+!*VWRITE,HGnode(1)
+!%g 
+!*CFCLOS
+ 
+
+
+*DIM,HGnode  ,ARRAY, nnode  
+*do,i,1,nnode,1
+*GET,HGnode(i),node,i,hgen,
+*enddo
+
+!*CFOPEN,getHGnode,txt     ! save data to this file
+!*VWRITE,HGnode(1)
+!%g 
+!*CFCLOS
+/out
+
+/solu 
+SOLVE   
+FINISH  
+/POST1  
+set,last
+ 
+*DIM,nodetemp  ,ARRAY, nnode  
+*do,i,1,nnode,1
+*GET,nodetemp(i),node,i,temp,
+*enddo
+
+!*CFOPEN,nodeRst,txt     ! save data to this file
+!*VWRITE,nodetemp(1)
+!%g 
+!*CFCLOS
+
+! output
+!  Node ID,      loc  x       y          z          HGEN         TEMP
+*cfopen,node-loc-hgen-temp.dat
+*vwrite,nl(1),nx(1),ny(1),nz(1),HGnode(1),nodetemp(1) 
+(F9.0,,E,' , ',E,' , ',E,' , ',E,' , ',E,' , ')
+*cfclos
+
+
+/out
+
+/page,100000,,100000
+/out,elist,dat
+elist
+/out,nlist,dat
+nlist
